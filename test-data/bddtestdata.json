@@ -1,0 +1,23 @@
+{
+    "passengerDetails": [
+      {
+        "First Name": "Dari",
+        "Last Name": "Terri",
+        "Gender": "Female",
+        "Nationality": "US",
+        "Birth Month": "6",
+        "Birth Day": "12",
+        "Birth Year": "1990"
+      },
+      {
+        "First Name": "Andrew",
+        "Last Name": "Smith",
+        "Gender": "Male",
+        "Nationality": "US",
+        "Birth Month": "8",
+        "Birth Day": "12",
+        "Birth Year": "1990"
+      }
+    ]
+  }
+  

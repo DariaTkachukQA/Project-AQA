@@ -1,0 +1,5 @@
+{
+    "cucmberautocomplete.steps": [
+        "tests/steps/*.step.js"
+    ]
+}
