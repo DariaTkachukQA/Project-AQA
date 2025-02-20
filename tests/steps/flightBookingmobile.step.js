@@ -2,9 +2,8 @@ import { createBdd } from 'playwright-bdd';
 import { expect} from "@playwright/test";
 import { page } from '@playwright/test';
 import { devices } from '@playwright/test';
-import SearchResultsPage from '../pages/SearchResultsPage';
 const { Given, When, Then } = createBdd();
-import CheckoutPage from '../pages/CheckoutPagemob';
+import CheckoutPage from '../pages/mobile/checkoutPage';
 
 
 
