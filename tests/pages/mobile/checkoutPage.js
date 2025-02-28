@@ -1,40 +1,61 @@
-
 export default class CheckoutPage {
     constructor(page) {
         this.page = page;
+        this.emailInput = page.getByTestId('email-input');
+        this.phoneInput = page.getByRole('textbox', { name: 'Phone*' });
+        this.addressInput = page.getByTestId('address-input');
+        this.zipCodeInput = page.getByTestId('zipCode-input');
+        this.countryDropdown = page.getByTestId('country-select');
+        this.cityInput = page.getByTestId('city-input');
+        this.passengerGenderInput = '#passenger-0-ps_gender label';
         this.nextStepButton = page.locator('button#next-step-bnt.btn.checkout-form__btn[type="button"]');
-        this.continueAsGuestButton = page.locator('button', { name: 'Continue as Guest' });
-        this.emailField = page.locator('input[aria-label="Email *"]');
-        this.phoneNumberField = page.locator('input[aria-placeholder="-555-0123"]');
-        this.addressField = page.locator('input[aria-placeholder="Street Address"]');
-        this.zipCodeField = page.locator('input[aria-placeholder="Zip Code"]');
-        this.countrySelector = page.locator('#select2-checkout-ch_country-container');
-        this.cityField = page.locator('input[aria-placeholder="City"]');
-        this.firstNameField = page.locator('input[aria-placeholder="E.g. John"]');
-        this.lastNameField = page.locator('input[aria-placeholder="E.g. Smith"]');
-        this.genderRadioButtons = page.locator('#passenger-0-ps_gender label');
-        this.cardNumberField = page.locator('input[aria-label="Card Number *"]');
-        this.expirationDateField = page.locator('input[aria-label="Expiration Date *"]');
-        this.cvvField = page.locator('input[aria-label="CVV *"]');
-        this.cardholderNameField = page.locator('input[aria-label="Cardholder\'s Name *"]');
-        this.submitPaymentButton = page.locator('button.btn.checkout-form__btn[type="submit"]');
-        this.confirmationMessage = page.locator('.booker-details__title-text');
+        this.continueAsGuestButton = page.getByRole('button', { name: 'Continue as Guest' });
+        this.submitPaymentButton = page.locator('button[type="submit"]');
+        this.confirmationMessage = page.locator('.confirmation-message'); // Adjust selector if needed
     }
 
-    async fillPassengerDetails({ Email, Phone, Address, ZipCode, Country, City, FirstName, LastName, Gender }) {
-        await this.emailField.fill(Email);
-        await this.phoneNumberField.fill(Phone);
-        await this.addressField.fill(Address);
-        await this.zipCodeField.fill(ZipCode);
-        await this.countrySelector.click();
-        await this.page.getByText(Country).click();
-        await this.cityField.fill(City);
-        await this.firstNameField.fill(FirstName);
-        await this.lastNameField.fill(LastName);
-        await this.genderRadioButtons.nth(Gender === 'Female' ? 2 : 1).click();
+    async proceedToCheckout() {
+        await this.nextStepButton.click();
+    }
+
+    async continueAsGuest() {
+        await this.continueAsGuestButton.click();
+    }
+
+    async fillPassengerDetails(passengers) {
+        for (let i = 0; i < passengers.length; i++) {
+            const { firstName, lastName, gender, nationality, birthMonth, birthDay, birthYear } = passengers[i];
+
+            await this.page.getByTestId(`pax${i}FirstName-input`).fill(firstName);
+            await this.page.getByTestId(`pax${i}LastName-input`).fill(lastName);
+
+            if (gender) {
+                await this.page.getByTestId(`pax${i}Gender-dropdown`).click();
+                await this.page.getByText(gender).click();
+            }
+
+            await this.page.getByTestId(`pax${i}Nationality-combobox`).click();
+            await this.page.getByTestId(`pax${i}Nationality-option-${nationality}`).click();
+            await this.page.getByTestId(`pax${i}BirthMonth-combobox`).click();
+            await this.page.getByTestId(`pax${i}BirthMonth-option-${birthMonth}`).click();
+            await this.page.getByTestId(`pax${i}BirthDay-input`).fill(birthDay);
+            await this.page.getByTestId(`pax${i}BirthYear-input`).fill(birthYear);
+        }
+    }
+
+    async enterPaymentDetails({ CardNumber, ExpirationDate, CVV, CardholderName }) {
+        await this.page.getByTestId('card-number-input').fill(CardNumber);
+        await this.page.getByTestId('expiration-date-input').fill(ExpirationDate);
+        await this.page.getByTestId('cvv-input').fill(CVV);
+        await this.page.getByTestId('cardholder-name-input').fill(CardholderName);
+    }
+
+    async submitPayment() {
+        await this.submitPaymentButton.click();
     }
 
     async waitForConfirmation() {
-        await this.confirmationMessage.waitFor({ state: 'visible' });
+        await this.confirmationMessage.waitFor({ state: 'visible', timeout: 10000 });
     }
 }
+

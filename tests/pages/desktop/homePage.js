@@ -16,20 +16,38 @@ export default class HomePage {
     async selectOrigin(origin) {
         await this.page.locator(this.originInput).fill(origin);
         await this.page.locator(this.originInput).click();
-        await this.page.getByText(origin).click();
+        // await this.page.getByText(origin).nth.click();
+        await this.page.getByText('Miami International').nth(1).click();
+        //await this.page.locator(this.originInput).click();
     }
 
     async selectDestination(destination) {
+        await this.page.locator(this.destinationInput).click();
         await this.page.locator(this.destinationInput).fill(destination);
         await this.page.locator(this.destinationInput).click();
-        await this.page.getByText(destination).click();
+        await this.page.getByText(destination).nth(1).click();
     }
 
     async selectDates(depart, returnDate) {
-        await this.page.locator(this.departureDate).click();
-        await this.page.getByText(depart, { exact: true }).first().click();
-        await this.page.getByText(returnDate, { exact: true }).first().click();
+            await this.page.locator('#departureDate').click();
+        
+            // Вибір місяців, якщо потрібно переключити календар
+            await this.page.getByRole('row', { name: 'March' }).locator('i').click();
+            await this.page.getByRole('row', { name: 'April' }).locator('i').click();
+        
+            // Вибір дат
+            await this.page.getByText('20', { exact: true }).first().click();
+            await this.page.getByText('25', { exact: true }).first().click();
+        
+        
     }
+        // await page.locator('#departureDate').click();
+        // await page.getByRole('row', { name: 'March' }).locator('i').click();
+        // await page.getByRole('row', { name: 'April' }).locator('i').click();
+        // await page.getByText('20', { exact: true }).first().click();
+        // await page.getByText('25', { exact: true }).first().click();
+  
+    
 
     async setTravelers(travelers) {
         const [numAdults] = travelers.split(" ");
@@ -46,7 +64,7 @@ export default class HomePage {
     }
 
     async searchFlights() {
-        await this.page.locator(this.searchButton).click();
+        await this.page.locator(this.searchButton).nth(0).click();
     }
 }
 

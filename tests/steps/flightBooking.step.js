@@ -1,10 +1,9 @@
 import { createBdd } from 'playwright-bdd';
-
 import { expect} from "@playwright/test";
 import { page } from '@playwright/test';
 const { Given, When, Then } = createBdd();
 import SearchResultsPage from '../pages/desktop/searchResultsPage';
-import HomePage from '../pages/desktop/searchResultsPage';
+import HomePage from '../pages/desktop/HomePage';
 import CheckoutPage from '../pages/desktop/CheckoutPage';
 
 Given('The user opens Home page', async ({ page }) => {
@@ -23,10 +22,10 @@ When('The user selects departure date {string} and return date {string}', async 
     await homePage.selectDates(depart, returnDate);
 });
 
-When('The user sets travelers number to {string}', async ({ page }, travelers) => {
-    const homePage = new HomePage(page);
-    await homePage.setTravelers(travelers);
-});
+// When('The user sets travelers number to {string}', async ({ page }, travelers) => {
+//     const homePage = new HomePage(page);
+//     await homePage.setTravelers(travelers);
+// });
 
 When('The user chooses flight class {string}', async ({ page }, flightClass) => {
     const homePage = new HomePage(page);
@@ -56,9 +55,11 @@ When('The user fills Contact Billing details', async ({ page }) => {
     });
 });
 
-When('The user enters passenger details', async ({ page }, table) => {
+When('The user enters passenger details', async ({ page }, dataTable) => {
     const checkoutPage = new CheckoutPage(page);
-    const passengers = table.hashes().map(row => ({
+
+    // Створення масиву passengers на основі даних таблиці
+    const passengers = dataTable.hashes().map(row => ({
         firstName: row["First Name"],
         lastName: row["Last Name"],
         gender: row["Gender"],
@@ -67,6 +68,8 @@ When('The user enters passenger details', async ({ page }, table) => {
         birthDay: row["Birth Day"],
         birthYear: row["Birth Year"]
     }));
+
+    // Тепер передаємо цей масив у метод
     await checkoutPage.fillPassengerDetails(passengers);
 });
 
@@ -101,7 +104,7 @@ Then('The user should see the confirmation message {string}', async ({ page }, m
 });
 
 Then('The user should see the success message with booking details', async ({ page }) => {
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(20000);
     await expect(page.locator(".booker-details")).toBeVisible();
 });
 

@@ -5,7 +5,7 @@ Feature: Flight Booking
     Given The user opens Home page
     When The user selects origin "MIA" and destination "LAX"
     And The user selects departure date "April 20" and return date "April 25"
-    And The user sets travelers number to "2 Adults"
+    # And The user sets travelers number to "2 Adults"
     And The user chooses flight class "Premium Economy"
     And The user makes search for available flights
     And The user selects a random flight and proceed to booking
@@ -13,7 +13,7 @@ Feature: Flight Booking
     And The user enters passenger details
       | First Name | Last Name | Gender  | Nationality | Birth Month | Birth Day | Birth Year |
       | Dari       | Terri     | Female  | US          | 6           | 12        | 1990       |
-      | Andrew     | Smith     | Male    | US          | 8           | 12        | 1990       |
+      # | Andrew     | Smith     | Male    | US          | 8           | 12        | 1990       |
     And The user clicks the continue button
     And The user enters payment details 
       | Card Number         | Name               | Month | Year | CVV  |
